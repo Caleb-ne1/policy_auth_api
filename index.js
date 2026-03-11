@@ -18,6 +18,9 @@ app.get("/", (req, res) => {
 const userRoute = require("./routes/user.route");
 app.use("/api/user", userRoute);
 
+const roleRoute = require("./routes/role.route");
+app.use("/api/role", roleRoute);
+
 const PORT = process.env.PORT || 5000
 
 db.sequelize.sync({ alter: true }).then(() => {
