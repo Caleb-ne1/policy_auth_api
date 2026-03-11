@@ -14,6 +14,10 @@ app.get("/", (req, res) => {
     res.send("Policy api running");
 })
 
+// routes
+const userRoute = require("./routes/user.route");
+app.use("/api/user", userRoute);
+
 const PORT = process.env.PORT || 5000
 
 db.sequelize.sync({ alter: true }).then(() => {
