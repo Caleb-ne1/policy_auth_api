@@ -1,0 +1,27 @@
+require('dotenv').config();
+
+const express = require("express");
+
+
+const app = express()
+// import models
+const db = require("./models");
+
+//middleware
+app.use(express.json());
+
+app.get("/", (req, res) => {
+    res.send("Policy api running");
+})
+
+const PORT = process.env.PORT || 5000
+
+db.sequelize.sync({ alter: true }).then(() => {
+    console.log("Database synced");
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    })
+})
+.catch((err) => {
+    console.error("Error syncing database:", err);
+})
