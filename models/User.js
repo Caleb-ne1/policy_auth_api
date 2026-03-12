@@ -10,9 +10,18 @@ module.exports = (sequelize) => {
         password: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        roleId: {
+            type: DataTypes.INTEGER,
+            allowNull: true
         }
     }, {
         timestamps: true
     })
+
+    User.associate = (models) => {
+      User.belongsTo(models.Role, { foreignKey: "roleId" });
+    };
+
     return User;
 }
