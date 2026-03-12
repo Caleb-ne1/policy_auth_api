@@ -19,7 +19,7 @@ const userRoute = require("./routes/user.route");
 app.use("/api/user", userRoute);
 
 const roleRoute = require("./routes/role.route");
-app.use("/api/role", roleRoute);
+app.use("/api/roles", roleRoute);
 
 const policyRoute = require("./routes/policy.route");
 app.use("/api/policy", policyRoute);
