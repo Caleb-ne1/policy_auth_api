@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const express = require("express");
-
+const cookieParser = require("cookie-parser");
 
 const app = express()
 // import models
@@ -9,6 +9,7 @@ const db = require("./models");
 
 //middleware
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
     res.send("Policy api running");

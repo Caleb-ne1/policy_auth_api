@@ -1,5 +1,6 @@
 const { User, Role } = require('../models');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 
 // add user to database
 exports.addUser = async (email, password) => {
@@ -8,7 +9,7 @@ exports.addUser = async (email, password) => {
 
     if(!password) throw new Error("PasswordRequired");
 
-    const user = await User.findOne({where: { email }});
+    const user = await User.findOne({where: { email }, attributes: { exclude: ["password"]}});
 
     if(user) throw new Error("UserExists");
 
@@ -28,14 +29,40 @@ exports.addUser = async (email, password) => {
         roleId: defaultRole.id
     });
 
-    return newUser;
+    const { password: _, ...safeUser} = newUser.toJSON();
+
+    return safeUser;
 
 }
 
 
-// edit user details
+// login user details
+exports.login = async (email, password) => {
 
-// edit user
+    if(!email) throw new Error("Email required");
+    if(!password) throw new Error("Password required");
+
+    // check is user exists
+    const user = await User.findOne({ where: { email }});
+
+    if(!user) throw new Error("UserNotFound");
+
+    // compare passwords
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if(!isMatch) throw new Error("InvalidPassword");
+
+    // generate token
+    const token =  jwt.sign({
+        userId: user.id,
+        roleId: user.roleId
+    }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN});
+
+    return token;
+
+}
+
+// delete user
 exports.deleteUser = async (userId) => {
     
     const user = await User.findByPk(userId);
@@ -47,4 +74,24 @@ exports.deleteUser = async (userId) => {
 
     return { message : "User deleted successfully"};
 
+}
+
+// profile 
+exports.fetchProfile = async (userId) => {
+    
+   if(!userId) throw new Error("UserIdRequired");
+
+    const user = await User.findByPk(userId, {
+        attributes: { exclude: ["password"]},
+      include: [
+        {
+          model: Role,
+          as: "Role",
+          attributes: ["id", "name", "description"],
+        },
+      ],
+    });
+    if(!user) throw new Error("NotFound");
+
+    return user;
 }
