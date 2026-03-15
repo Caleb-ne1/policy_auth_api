@@ -6,6 +6,13 @@ const cookieParser = require("cookie-parser");
 const app = express()
 // import models
 const db = require("./models");
+const { RolePolicy, Role, Policy } = require("./models");
+
+RolePolicy.belongsTo(Policy, { foreignKey: "policyId", as: "Policy" });
+RolePolicy.belongsTo(Role, { foreignKey: "roleId", as: "Role" });
+
+Role.hasMany(RolePolicy, { foreignKey: "roleId" });
+Policy.hasMany(RolePolicy, { foreignKey: "policyId" });
 
 //middleware
 app.use(express.json());
