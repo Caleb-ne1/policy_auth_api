@@ -62,6 +62,37 @@ const login = async (req, res) => {
     }
 }
 
+// update user role
+const updateUserRole = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { roleId } = req.body;
+
+        const updatedUser = await userService.editUserRole(userId, roleId);
+
+        res.json({success: true, message: "User role updated", user: updatedUser });
+    } catch (err) {
+
+        if(err.message === "Required") {
+            return res.status(400).json({ success: false, message: "userId and RoleId required" })
+        }
+
+        if (err.message === "UserNotFound") {
+            return res.status(400).json({ success: false, message: "User not found" })
+        }
+
+        if (err.message === "RoleNotFound") {
+            return res.status(400).json({success: false, message: "Role not found"})
+        }
+
+        if (err.message) {
+            return res.status(400).json({success: false, message: err.message })
+        }
+
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
 // delete user 
 const deleteUser = async (req, res) => {
     try {
@@ -110,4 +141,4 @@ const profile = async (req, res) => {
         res.status(500).json({ success: false, error: "Internal server error"});
     }
 }
-module.exports = { registerUser, deleteUser, login, profile }
+module.exports = { registerUser, deleteUser, login, profile, updateUserRole }

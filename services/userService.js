@@ -35,6 +35,36 @@ exports.addUser = async (email, password) => {
 
 }
 
+// edit user role
+exports.editUserRole = async (userId, newRoleId) => {
+    if(!userId || !newRoleId ) {
+        throw new Error("Required");
+    } 
+    // find the user
+    const user = await User.findByPk(userId);
+    if (!user) {
+        throw new Error("UserNotFound");
+    }
+
+    //  check if the role exists
+    const role = await Role.findByPk(newRoleId);
+    if (!role) {
+        throw new Error("RoleNotFound");
+    }
+
+
+    user.roleId = newRoleId;
+    await user.save();
+
+
+    return {
+        id: user.id,
+        email: user.email,
+        roleId: user.roleId,
+        updatedAt: user.updatedAt
+    };
+};
+
 
 // login user details
 exports.login = async (email, password) => {

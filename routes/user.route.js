@@ -11,4 +11,5 @@ router.delete('/delete', userController.deleteUser);
 router.post('/login', userController.login);
 router.get('/profile', authenticate, userController.profile);
 
+router.put('/:userId/role', authenticate, authorize('update_user_role'), userController.updateUserRole);
 module.exports = router
