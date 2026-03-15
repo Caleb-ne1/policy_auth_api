@@ -74,6 +74,11 @@ Create a .env file in the root:
 # Server
 PORT=5000
 
+
+# cors config
+# Multiple origins must be separated by commas
+CORS_ORIGINS=http://localhost:3000,https://example.com
+
 # Database
 DB_HOST=localhost
 DB_PORT=5432
@@ -83,7 +88,7 @@ DB_PASSWORD=your_password
 DB_DIALECT=postgres  # or 'mysql', 'sqlite', 'mssql'
 
 # JWT Configuration
-JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
+JWT_SECRET=your_super_secret_jwt_key
 JWT_EXPIRES_IN=1h
 
 # Default Role

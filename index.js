@@ -2,8 +2,22 @@ require('dotenv').config();
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const app = express()
+// cors
+const allowedOrigins = process.env.CORS_ORIGINS.split(",");
+
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
+}));
+
 // import models
 const db = require("./models");
 const { RolePolicy, Role, Policy } = require("./models");
