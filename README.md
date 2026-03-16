@@ -102,6 +102,34 @@ node index.js
 
 Sequelize will sync models automatically 
 
+## Running with Docker
+
+- Before running the containers update database .env with the following database configuration (used by Docker Compose):
+
+```env 
+# Database (for Docker Compose)
+DB_HOST=db          # must match the 'db' service in docker-compose.yml
+DB_PORT=5432
+DB_NAME=policy_auth_db
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_DIALECT=postgres
+```
+
+- Then build and start the containers:
+
+```bash
+docker compose up --build
+```
+- Stop containers:
+
+```bash
+docker compose down
+```
+- Your API will be available at:
+
+http://localhost:5000
+
 ## API Endpoints
 ### Authentication
 
